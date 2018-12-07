@@ -9,10 +9,10 @@ This repository consists of the following:
     * Paper
     * Final presentation slide deck
     * 1 slide project summary 
-    * Document containing paragraph with work distribution
-* GenerateTrials
+    * Document containing paragraph with breakdown of work
+* GenerateTrials:
     * Script used to generate paths in for trials of the study
-* Matlab
+* Matlab:
     * Script used to plot and compare sensor data from Sphero and generated path
 * SpheroCode:
     * Code that was run on the Spheros
