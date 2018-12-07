@@ -18,3 +18,9 @@ This repository consists of the following:
     * Code that was run on the Spheros
 
 In addition, all code folders contain their respective README.mds for further detail.
+
+All trial videos can be seen using the following links:
+* Normal Speed:
+   * https://www.youtube.com/playlist?list=UU6mbz8XUVjzq_I6kMfvgi2Q&fbclid=IwAR1JnEpEUPiBH6Qn6gItWpZNjkTTFpLpwCQL2q8APLc4OC8xdpdY_VlnukQ
+* 2x Speed:
+   * https://www.youtube.com/playlist?list=UUQsEWG_jvD8OeuO2-_lAH3A&fbclid=IwAR0yGY3rBmlHWOMoH4iRRGTswg43K7oVikC5Hy1gaik1M1MK1U7ic-JQ2Fw
