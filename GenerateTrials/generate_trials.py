@@ -8,6 +8,8 @@ import sys
 import random
 import csv
 
+# Generate paths for each sphero
+
 sphero0 = paths.generate_set([0,0], 750, 60, 60, 72)
 sphero1 = paths.generate_set([0,0], 750, 60, 60, 72)
 sphero2 = paths.generate_set([0,0], 750, 60, 60, 72)
@@ -16,8 +18,12 @@ sphero4 = paths.generate_set([0,0], 750, 60, 60, 72)
 
 compiled_paths = [sphero0, sphero1, sphero2, sphero3, sphero4]
 
+# special contains all trials that have chasing
+# We used an online random generate to decide which trials those would be 
+
 special = {}
 trans = 30.48
+
 
 relative_coord = [[-1 for x in xrange(5)] for x in xrange(5)]
 
@@ -46,6 +52,8 @@ relative_coord[4][1] = [0, trans]
 relative_coord[4][2] = [-trans/2, trans/2]
 relative_coord[4][3] = [-trans, 0]
 
+
+# This can be used to generate n trials all of which contain chasing, where n is specified by range of for loop in line 57
 ws_pairs = []
 for i in range(24):
     angle = i//4 * 30
@@ -64,6 +72,9 @@ for i in range(24):
 #Output wolf,sheep pairs to CSV for Matlab
 sys.stderr.write(str(ws_pairs))
 generate_csv.convert_to_ws_csv(ws_pairs)
+
+
+#Alternatively, if want chase present and chase absent trials to be mixed, specify which trials have wolf sheep pairs by adding key to dictionary
 
 '''
 special[0] = [[4,0], [-trans, trans], 120]
@@ -85,6 +96,8 @@ special[32] = [[4,3], [-trans, 0], 0]
 special[34] = [[3,1], [trans, trans], 30]
 special[35] = [[2,0], [-trans/2, trans/2], 90]
 '''
+
+#Replace trials with chasing as needed
 for key in special:
     info = special[key]
     wolf = info[0][0]
@@ -110,6 +123,8 @@ for i in range(0, len(compiled_paths)):
     for j in range(0, len(compiled_paths[i])):
         if compiled_paths[i][j][0] == [0,0]:
             compiled_paths[i][j].pop(0)
+
+#Print out paths
 
 print("------------------------------------------------------------------------")          
 for i in range(0, len(compiled_paths)):

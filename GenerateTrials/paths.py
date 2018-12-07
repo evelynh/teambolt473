@@ -1,7 +1,13 @@
 import math
 import random
 
+
 def generate_point(point, angle, dist, x_max, y_max):
+    '''
+    Calculate point at distance and angle away from inputted point
+    If that calculated point is within bounds, return calculated points
+    Otherwise, adjust x and y as needed so point is within bounds
+    '''
     x = point[0] + dist*math.cos(angle*math.pi/180)
     y = point[1] + dist*math.sin(angle*math.pi/180)
     if abs(x) > x_max:
@@ -17,11 +23,17 @@ def generate_point(point, angle, dist, x_max, y_max):
     return [x, y]
 
 def calc_dist(A, B):
+    '''
+    Calcualte distance between A and B
+    '''
     dist = math.sqrt((B[0]-A[0])**2 + (B[1]-A[1])**2)
     return dist
 
 
 def calc_total_dist(points):
+    '''
+    Calculate total distance travelled by set of points
+    '''
     total_dist = 0
     if len(points) <= 2:
         return 0
@@ -32,18 +44,19 @@ def calc_total_dist(points):
     return round(total_dist,2)
         
 def round_points(points):
+    '''
+    Round points to have maximum 2 decimal points
+    '''
     rounded = points
     for i in range(0, len(points)):
         rounded[i] = [round(points[i][0], 2), round(points[i][1], 2)]
     return rounded
-'''
-def shorten_path(points):
-    while calc_total_dist(points) > 501 and len(points)>3:
-        points.pop(len(points)-2)
-    return points
-'''
 
 def remove_repeats(points):
+    '''
+    Remove consecutive points that are repeats, which causes issues for Sphero robots
+    ex. [[0,0], [50,50], [50,50]] -> [[0,0], [50,50]]
+    '''
     toReturn = []
     i = 0
     while i < len(points)-1:
@@ -60,6 +73,9 @@ def remove_repeats(points):
     return toReturn
 
 def is_bad_path(points):
+    '''
+    If after removing all the bad points, distance is less than 100, know to discard that sent of points
+    '''
     start = 1
     end = -1
     tot_cur_dist = 0
@@ -77,6 +93,13 @@ def is_bad_path(points):
 
 
 def generate_path(start, tot_dist, x_max, y_max):
+    '''
+    Generate path given specified inputs:
+        start = starting point
+        tot_distance = total distance of path
+        x_max: maximum distance in +x and -x direction
+        y_max: maximum distance in +y and -y direction
+    '''
     curr_point = start
     points = [start]
     dist_remain = tot_dist
@@ -93,7 +116,6 @@ def generate_path(start, tot_dist, x_max, y_max):
         prev_point = points[len(points)-1]
         if abs(prev_point[0]) == x_max or abs(prev_point[1]) == y_max:
             '''
-            # print("hi") 
             if 0 <= r_angle < 45:
                 r_angle = r_angle + 100
             elif 45 <= r_angle < 90:
@@ -142,6 +164,13 @@ def generate_path(start, tot_dist, x_max, y_max):
     return test
 
 def generate_set(start, tot_dist, x_max, y_max, n):
+    '''
+    Generate set of n paths with all with the same parameters
+        start = starting point
+        tot_distance = total distance of path
+        x_max: maximum distance in +x and -x direction
+        y_max: maximum distance in +y and -y direction    
+    '''
     printed = 0
     toReturn = []
     while printed < n:
