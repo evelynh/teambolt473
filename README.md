@@ -19,7 +19,7 @@ This repository consists of the following:
 
 In addition, all code folders contain their respective README.mds for further detail.
 
-All trial videos can be seen using the following links:
+All trial videos can be found via the following links:
 * Normal Speed:
    * https://www.youtube.com/playlist?list=UU6mbz8XUVjzq_I6kMfvgi2Q&fbclid=IwAR1JnEpEUPiBH6Qn6gItWpZNjkTTFpLpwCQL2q8APLc4OC8xdpdY_VlnukQ
 * 2x Speed:
