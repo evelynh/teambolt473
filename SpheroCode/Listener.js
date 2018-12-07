@@ -3,6 +3,8 @@ var _messageChannels = [1];
 let j = 0;
 
 async function startProgram() {
+	// Wait for IR message from broadcaster
+	// The messageChannel it is listening for should correspond to what Broadcaster is emitting
 	listenForIRMessage(_messageChannels);
 }
 
@@ -32,6 +34,14 @@ async function runTrial(points) {
 	} 
 	setMainLed({ r: 255, g: 0, b: 255});
 	await delay(10);
+
+	/*
+	This is where the duration of each trial is set (unit = ms). Regardless of whether or not there are still points left to go to, once
+	time has elapsed, robot stops motion. 
+	The Broadcaster should have a slightly longer time_tolerance than listeners to make sure that all listeners are done before it broadcasts
+	message to start the next trial.
+	*/ 
+	
 	initial_time = new Date().getTime();
 	time_tolerance = 16000;
 	await go_to([0,0], -initX, -initY, 30, initial_time, time_tolerance * 100, 5, 255, 0, 255);
@@ -51,6 +61,10 @@ async function runTrial(points) {
 }
 
 async function onIRMessage1(channel) {
+	// When it receives message from Broadcaster, that's the signal to start running trials 
+
+	// Passes in  an array of arrays of points that the robot will go to
+	// Each points[i] consists of the set of points that the robot will go to in trial i 
 	points = [
 [[-60.0, -13.51], [-46.95, 43.0], [11.01, 60.0], [19.74, 18.92], [-23.83, 1.31], [-60.0, 4.56], [-46.71, 45.45], [-60.0, 9.2], [-60.0, 60.0], [1.39, 45.83], [-2.91, -36.06], [49.96, -60.0], [60.0, 11.8], [60.0, -51.16]],
 
@@ -272,6 +286,7 @@ async function onIRMessage1(channel) {
 	runTrial(points);
 }
 
+// go_to function is identical to both Broadcaster + Listener robots
 async function go_to(point, initX, initY, speed, initial_time, time_tolerance, tolerance, r, g, b){
 	var d_x = point[0] - getLocation().x - initX;
 	var d_y = point[1] - getLocation().y - initY;

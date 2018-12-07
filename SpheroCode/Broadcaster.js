@@ -1,6 +1,8 @@
 //Yellow 2
 // Broadcaster
 async function startProgram() {
+	// An array of arrays of points that the robot will go to
+	// Each points[i] consists of the set of points that the robot will go to in trial i 
 	points = [
 
  [[-60.0, -35.88], [-53.73, 23.8], [-60.0, 60.0], [8.31, 26.68], [44.85, 42.95], [-0.9, 60.0], [47.65, 60.0], [50.51, 19.1], [51.26, 60.0], [-9.09, 26.55], [-57.09, 55.39], [8.9, 54.24], [44.15, 10.72], [38.5, 60.0]],
@@ -220,7 +222,11 @@ async function startProgram() {
 
 
 ];
+
+	// This for loop is how broadcaster controls which trials are run
+	// For example, for loop is currntly set to run just Trial 0 (since condition is j=0; j < 1)
 	for (var j = 0; j < 1; j++){
+		// Send IR message to listener robots 
 		startIRBroadcast(0, 1);
 		setMainLed({ r: 0, g: 0, b: 0});
 		await delay(1.25);
@@ -248,8 +254,17 @@ async function startProgram() {
 		stopIRBroadcast(0,1);
 		setMainLed({ r: 255, g: 255, b: 0});
 		await delay(10);
+
+		/*
+		This is where the duration of each trial is set (unit = ms). Regardless of whether or not there are still points left to go to, once
+		time has elapsed, robot stops motion. 
+		The Broadcaster should have a slightly longer time_tolerance than listeners to make sure that all listeners are done before it broadcasts
+		message to start the next trial.
+		*/
+		
 		initial_time = new Date().getTime();
 		time_tolerance = 17000;
+
 		await go_to([0,0], -initX, -initY, 30, initial_time, time_tolerance * 100, 5, 255, 255, 0);
 		//await go_to_origin(initX, initY);
 		//await delay(7);
@@ -264,6 +279,7 @@ async function startProgram() {
 	}
 }
 
+// go_to function is identical to both Broadcaster + Listener robots
 async function go_to(point, initX, initY, speed, initial_time, time_tolerance, tolerance, r, g, b){
 	var d_x = point[0] - getLocation().x - initX;
 	var d_y = point[1] - getLocation().y - initY;
