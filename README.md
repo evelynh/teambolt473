@@ -1,5 +1,8 @@
 # Team Bolt Github Repository
 
+
+*Course project for CPSC473: Intelligent Robotics Lab exploring human perception of chasing in real life.* 
+
 This repository consists of the following:
 * Documents:
     * Data from the two versions of the study, both in original form and cleaned
