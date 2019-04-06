@@ -8,23 +8,25 @@ def generate_point(point, angle, dist, x_max, y_max):
     If that calculated point is within bounds, return calculated points
     Otherwise, adjust x and y as needed so point is within bounds
     '''
+    #print("new point being generated with angle %f" % angle)
     x = point[0] + dist*math.cos(angle*math.pi/180)
     y = point[1] + dist*math.sin(angle*math.pi/180)
+    #print("originals x:" + str(x) + " y:" + str(y))
     if abs(x) > x_max:
-        if x < 0:
-            x = -x_max
-        else:
-            x = x_max
+    	if x > 0: x_new = x_max 
+    	else: x_new = - x_max
+    	y = (y - point[1])/(x - point[0]) * (x_new - point[0]) + point[1]
+    	x = x_new
     if abs(y) > y_max:
-        if y < 0:
-            y = -y_max
-        else:
-            y = y_max
+    	if y > 0: y_new = y_max 
+    	else: y_new = - y_max
+    	x = (x - point[0])/(y - point[1]) * (y_new - point[1]) + point[0]
+    	y = y_new
     return [x, y]
 
 def calc_dist(A, B):
     '''
-    Calcualte distance between A and B
+    Calculate distance between A and B
     '''
     dist = math.sqrt((B[0]-A[0])**2 + (B[1]-A[1])**2)
     return dist
@@ -74,7 +76,8 @@ def remove_repeats(points):
 
 def is_bad_path(points):
     '''
-    If after removing all the bad points, distance is less than 100, know to discard that sent of points
+    If after removing all the bad points, distance is less than 100, know to discard that set of points.
+    Returns true if path distance for the last 4 points adds up to less than a 100
     '''
     start = 1
     end = -1
@@ -113,53 +116,42 @@ def generate_path(start, tot_dist, x_max, y_max):
     curr_point = gen_point
 
     while dist_remain > 0:
-        prev_point = points[len(points)-1]
-        if abs(prev_point[0]) == x_max or abs(prev_point[1]) == y_max:
-            '''
-            if 0 <= r_angle < 45:
-                r_angle = r_angle + 100
-            elif 45 <= r_angle < 90:
-                r_angle = 90 + (90 - r_angle)
-            elif 90 <= r_angle < 135:
-                r_angle = r_angle + 100
-            elif 135 <= r_angle < 180:
-                r_angle = 180+(r_angle-90)
-            elif 180 <= r_angle < 225:
-                r_angle = r_angle + 100
-            elif 225 <= r_angle < 270:
-                r_angle = 270 + (90-(180-r_angle))
-            elif 270 <= r_angle < 315:
-                r_angle = r_angle + 100
-            else:
-                r_angle = 360-r_angle
-            '''
-            add = random.randrange(200,270, 5)
-            r_angle = (r_angle + add) % 360
-            # rand = random.randrange(-1,1)
-        else:
-            angle1 = random.randrange(10, 80, 5)
-            angle2 = random.randrange(280, 350, 5)
+      	#print("dist remaining %f" % dist_remain)
+      	#print(points)
+      	prev_point = points[len(points)-1]
+
+      	#rebound condition corners
+      	if abs(prev_point[0]) == x_max and abs(prev_point[1]) == y_max:
+      		r_angle = (r_angle + 180) % 360
+      	#rebound condition right or left edge
+      	elif abs(prev_point[0]) == x_max:
+      		r_angle = (180 - r_angle) % 360
+      	#rebound condition bottom or top edge
+      	elif abs(prev_point[1]) == y_max:
+      		r_angle = 360 - r_angle
+        #non rebound
+      	else:
+            angle1 = random.randrange(0, 45, 3)
+            angle2 = random.randrange(-45, 0, 3)
             chooseangle = random.randint(1,2)
             if chooseangle == 1:
                 r_angle = (r_angle + angle1) % 360
             else:
                 r_angle = (r_angle + angle2) % 360
-            # rand = 1 
-        r_dist = random.randint(40, max_dist)
-        gen_point = generate_point(curr_point, r_angle, r_dist, x_max, y_max)
-        dist = calc_dist(curr_point, gen_point)
-        if dist <= 35:
-            continue
-        dist_remain = dist_remain - dist
-        points += [gen_point]
-        curr_point = gen_point
+      	r_dist = 30
+      	gen_point = generate_point(curr_point, r_angle, r_dist, x_max, y_max)
+      	dist = calc_dist(curr_point, gen_point)
+      	dist_remain = dist_remain - dist
+      	points += [gen_point]
+      	curr_point = gen_point
     points = round_points(points)
     test = remove_repeats(points)
     if (round(calc_total_dist(points), 2) != round(calc_total_dist(test), 2)):
         return -1
-    if(is_bad_path(test)):
-      	return -1
-    if (round(calc_total_dist(test), 2) < 500):
+    # if(is_bad_path(test)):
+    # 	print("IS BAD PATH")
+    #   	return -1
+    if (round(calc_total_dist(test), 2) < 200):
         return -1
     return test
 
@@ -174,9 +166,12 @@ def generate_set(start, tot_dist, x_max, y_max, n):
     printed = 0
     toReturn = []
     while printed < n:
-        points = generate_path(start, tot_dist, x_max, y_max)
-        if points != -1:
-            toReturn += [points]
-            printed += 1
+    	points = generate_path(start, tot_dist, x_max, y_max)
+    	if points != -1:
+        	toReturn += [points]
+        	printed += 1
+    	else:
+        	print("REJECTED")
     return toReturn
-          
+
+#print(generate_set([0,0], 750, 60, 60, 1))
