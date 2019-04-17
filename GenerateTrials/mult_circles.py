@@ -4,11 +4,13 @@ from matplotlib import animation
 
 import paths
 
-def intermediates(p1, p2, nb_points=100):
+def intermediates(p1, p2):
     """"Return a list of nb_points equally spaced points
     between p1 and p2"""
     # If we have 8 intermediate points, we have 8+1=9 spaces
     # between p1 and p2
+    dist = paths.calc_dist(p1, p2)
+    nb_points = int(dist)
     x_spacing = (p2[0] - p1[0]) / (nb_points + 1)
     y_spacing = (p2[1] - p1[1]) / (nb_points + 1)
 
@@ -35,9 +37,13 @@ def reformat(points):
 
 num_circs = 5
 
-orig_gen_paths = paths.generate_set([0,0], 750, 60, 60, num_circs)
-# code to convert points into usable format
+origins = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
+orig_gen_paths = []
 
+for i in range(num_circs):
+    orig_gen_paths.append(paths.generate_set(origins[i], 750, 80, 80, num_circs)[0])
+    
+# code to convert points into usable format
 min_length = float("inf")
 for i in range(0, num_circs):
     curr_length = len(orig_gen_paths[i])
@@ -67,7 +73,7 @@ plt.axis('off')
 fig.patch.set_facecolor((0, 0, 0))
 
 circs = []
-
+colors = ['b', 'g', 'r', 'c', 'm']
 for a in range(num_circs):
     curr_circle = plt.Circle((5, -5), 5, ec='w', fc='k')
     print(x_comp[a][0])
@@ -84,12 +90,13 @@ def animate(i):
         x = x_comp[a][i]
         y = y_comp[a][i]
         circs[a].center = (x, y) 
+        # if i > min_length*0:
+        #     circs[a].set_facecolor(colors[a])
     return circs
 
 anim = animation.FuncAnimation(fig, animate, 
                                init_func=init, 
                                frames=min_length*100, 
-                               interval=10,
+                               interval=30,
                                blit=True)
-
 plt.show()
