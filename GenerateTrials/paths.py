@@ -174,4 +174,4 @@ def generate_set(start, tot_dist, x_max, y_max, n):
         	print("REJECTED")
     return toReturn
 
-print(generate_set([0,0], 750, 60, 60, 1))
+# print(generate_set([0,0], 750, 60, 60, 1))

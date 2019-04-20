@@ -2,8 +2,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 # from matplotlib import animation
 import matplotlib.animation as animation
-
 import paths
+import generate_trials
 
 def intermediates(p1, p2):
     """"Return a list of nb_points equally spaced points
@@ -38,64 +38,6 @@ def reformat(points, origin):
 		y_data.append(point[1] + origin[1]) 
 	return x_data, y_data
 
-num_circs = 5
-
-origins = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
-orig_gen_paths = []
-
-for i in range(num_circs):
-    orig_gen_paths.append(paths.generate_set(origins[i], 675, 80, 80, num_circs)[0])
-
-reset_origins = [[15.24, -15.24], [15.24, 15.24], [0, 0], [-15.24, -15.24], [-15.24, 15.24]]
-    
-orig_x_comp = []
-orig_y_comp = []
-
-for i in range(0, num_circs):
-    x_data, y_data = reformat(orig_gen_paths[i], reset_origins[i])
-    orig_x_comp.append(x_data)
-    orig_y_comp.append(y_data)
-
-x_comp = []
-y_comp = []
-
-min_x_length = float("inf")
-for i in range(0, num_circs):
-    curr_x_length = len(orig_x_comp[i])
-    if curr_x_length < min_x_length:
-        min_x_length = curr_x_length
-min_y_length = float("inf")
-for i in range(0, num_circs):
-    curr_y_length = len(orig_y_comp[i])
-    if curr_y_length < min_y_length:
-        min_y_length = curr_y_length
-
-for i in range(0, num_circs):
-    x_comp.append(orig_x_comp[i][:min_x_length])
-
-for i in range(0, num_circs):
-    y_comp.append(orig_y_comp[i][:min_y_length])
-
-# Set up formatting for the movie files
-Writer = animation.writers['ffmpeg']
-writer = Writer(fps=33, metadata=dict(artist='Me'))
-
-# code to animate
-fig = plt.figure()
-ax = fig.add_subplot(111)
-
-plt.xlim(-100, 100)
-plt.ylim(-100, 100)
-plt.axis('off')
-fig.patch.set_facecolor((0, 0, 0))
-
-circs = []
-colors = ['b', 'g', 'r', 'c', 'm']
-for a in range(num_circs):
-    curr_circle = plt.Circle((5, -5), 5, ec='w', fc='k')
-    curr_circle.center = (x_comp[a][0], y_comp[a][0])  
-    circs.append(curr_circle)
-
 def init():
     for a in range(num_circs):
         ax.add_patch(circs[a])
@@ -111,18 +53,79 @@ def animate(i):
             circs[a].center = (x, y) 
     return circs
 
-# anim = animation.FuncAnimation(fig, animate, 
-#                                init_func=init, 
-#                                frames=1000, 
-#                                interval=30,
-#                                blit=True)
-ani = animation.FuncAnimation(fig, animate, 
-                               init_func=init, 
-                               frames=1000, 
-                               interval=30,
-                               blit=True)
-ani.save('trial' + str(1) + '.mp4', writer=writer)
+num_circs = 5
 
+# origins = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
+# orig_gen_paths = []
 
+# for i in range(num_circs):
+#     orig_gen_paths.append(paths.generate_set(origins[i], 675, 80, 80, num_circs)[0])
 
-plt.show()
+reset_origins = [[15.24, -15.24], [15.24, 15.24], [0, 0], [-15.24, -15.24], [-15.24, 15.24]]
+    
+orig_x_comp = []
+orig_y_comp = []
+
+orig_gen_paths = generate_trials.generate_trials()
+
+for j in range(0, len(orig_gen_paths[0])):
+
+	for i in range(0, num_circs):
+	    x_data, y_data = reformat(orig_gen_paths[i][j], reset_origins[i])
+	    orig_x_comp.append(x_data)
+	    orig_y_comp.append(y_data)
+
+	x_comp = []
+	y_comp = []
+
+	min_x_length = float("inf")
+	for i in range(0, num_circs):
+	    curr_x_length = len(orig_x_comp[i])
+	    if curr_x_length < min_x_length:
+	        min_x_length = curr_x_length
+	min_y_length = float("inf")
+	for i in range(0, num_circs):
+	    curr_y_length = len(orig_y_comp[i])
+	    if curr_y_length < min_y_length:
+	        min_y_length = curr_y_length
+
+	for i in range(0, num_circs):
+	    x_comp.append(orig_x_comp[i][:min_x_length])
+
+	for i in range(0, num_circs):
+	    y_comp.append(orig_y_comp[i][:min_y_length])
+
+	# Set up formatting for the movie files
+	Writer = animation.writers['ffmpeg']
+	writer = Writer(fps=33, metadata=dict(artist='Me'))
+
+	# code to animate
+	fig = plt.figure()
+	fig.set_size_inches(5, 5)
+	ax = fig.add_subplot(111)
+
+	plt.xlim(-100, 100)
+	plt.ylim(-100, 100)
+	plt.axis('off')
+	fig.patch.set_facecolor((0, 0, 0))
+
+	circs = []
+	colors = ['b', 'g', 'r', 'c', 'm']
+	for a in range(num_circs):
+	    curr_circle = plt.Circle((5, -5), 5, ec='w', fc='k')
+	    curr_circle.center = (x_comp[a][0], y_comp[a][0])  
+	    circs.append(curr_circle)
+
+	# anim = animation.FuncAnimation(fig, animate, 
+	#                                init_func=init, 
+	#                                frames=1000, 
+	#                                interval=30,
+	#                                blit=True)
+	ani = animation.FuncAnimation(fig, animate, 
+	                               init_func=init, 
+	                               frames=1000, 
+	                               interval=30,
+	                               blit=True)
+	ani.save('trials/trial' + str(j) + '.mp4', writer=writer, savefig_kwargs={'facecolor':'black'})
+
+	# plt.show()
