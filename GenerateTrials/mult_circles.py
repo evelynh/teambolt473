@@ -18,23 +18,25 @@ def intermediates(p1, p2):
     return [[p1[0] + i * x_spacing, p1[1] +  i * y_spacing] 
             for i in range(1, nb_points+1)]
 
-def reformat(points):
-    f_points = []
-    for i in range(0, len(points)-1):
-        p_1 = points[i]
-        p_2 = points[i+1]
-        btwn = intermediates(p_1, p_2)
-        for p in btwn:
-            f_points.append(p)
 
-    x_data = []
-    y_data = []
-
-    for point in f_points:
-        # print(point)
-        x_data.append(point[0])
-        y_data.append(point[1]) 
-    return x_data, y_data
+def reformat(points, origin):
+	""""Takes x, y pairs and makes it into an array of x's and y's
+	Also fixes relative to origin"""
+	f_points = []
+	for i in range(0, len(points)-1):
+		p_1 = points[i]
+		p_2 = points[i+1]
+		btwn = intermediates(p_1, p_2)
+		for p in btwn:
+			f_points.append(p)
+	x_data = []
+	y_data = []
+	# fixes origins
+	for point in f_points:
+		# print(point)	
+		x_data.append(point[0] + origin[0])
+		y_data.append(point[1] + origin[1]) 
+	return x_data, y_data
 
 num_circs = 5
 
@@ -43,12 +45,14 @@ orig_gen_paths = []
 
 for i in range(num_circs):
     orig_gen_paths.append(paths.generate_set(origins[i], 675, 80, 80, num_circs)[0])
+
+reset_origins = [[15.24, -15.24], [15.24, 15.24], [0, 0], [-15.24, -15.24], [-15.24, 15.24]]
     
 orig_x_comp = []
 orig_y_comp = []
 
 for i in range(0, num_circs):
-    x_data, y_data = reformat(orig_gen_paths[i])
+    x_data, y_data = reformat(orig_gen_paths[i], reset_origins[i])
     orig_x_comp.append(x_data)
     orig_y_comp.append(y_data)
 
@@ -74,7 +78,7 @@ for i in range(0, num_circs):
 
 # Set up formatting for the movie files
 Writer = animation.writers['ffmpeg']
-writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
+writer = Writer(fps=33, metadata=dict(artist='Me'))
 
 # code to animate
 fig = plt.figure()
@@ -107,17 +111,17 @@ def animate(i):
             circs[a].center = (x, y) 
     return circs
 
-anim = animation.FuncAnimation(fig, animate, 
+# anim = animation.FuncAnimation(fig, animate, 
+#                                init_func=init, 
+#                                frames=1000, 
+#                                interval=30,
+#                                blit=True)
+ani = animation.FuncAnimation(fig, animate, 
                                init_func=init, 
                                frames=1000, 
                                interval=30,
                                blit=True)
-# line_ani = animation.FuncAnimation(fig, animate, 
-#                                init_func=init, 
-#                                frames=100, 
-#                                interval=30,
-#                                blit=True)
-# line_ani.save('lines.mp4', writer=writer)
+ani.save('trial' + str(1) + '.mp4', writer=writer)
 
 
 
