@@ -42,27 +42,35 @@ origins = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
 orig_gen_paths = []
 
 for i in range(num_circs):
-    orig_gen_paths.append(paths.generate_set(origins[i], 750, 80, 80, num_circs)[0])
+    orig_gen_paths.append(paths.generate_set(origins[i], 675, 80, 80, num_circs)[0])
     
-# code to convert points into usable format
-min_length = float("inf")
-for i in range(0, num_circs):
-    curr_length = len(orig_gen_paths[i])
-    if curr_length < min_length:
-        min_length = curr_length
-
-gen_paths = []
+orig_x_comp = []
+orig_y_comp = []
 
 for i in range(0, num_circs):
-    gen_paths.append(orig_gen_paths[i][:min_length])
+    x_data, y_data = reformat(orig_gen_paths[i])
+    orig_x_comp.append(x_data)
+    orig_y_comp.append(y_data)
 
 x_comp = []
 y_comp = []
 
+min_x_length = float("inf")
 for i in range(0, num_circs):
-    x_data, y_data = reformat(gen_paths[i])
-    x_comp.append(x_data)
-    y_comp.append(y_data)
+    curr_x_length = len(orig_x_comp[i])
+    if curr_x_length < min_x_length:
+        min_x_length = curr_x_length
+min_y_length = float("inf")
+for i in range(0, num_circs):
+    curr_y_length = len(orig_y_comp[i])
+    if curr_y_length < min_y_length:
+        min_y_length = curr_y_length
+
+for i in range(0, num_circs):
+    x_comp.append(orig_x_comp[i][:min_x_length])
+
+for i in range(0, num_circs):
+    y_comp.append(orig_y_comp[i][:min_y_length])
 
 # Set up formatting for the movie files
 Writer = animation.writers['ffmpeg']
@@ -81,7 +89,6 @@ circs = []
 colors = ['b', 'g', 'r', 'c', 'm']
 for a in range(num_circs):
     curr_circle = plt.Circle((5, -5), 5, ec='w', fc='k')
-    print(x_comp[a][0])
     curr_circle.center = (x_comp[a][0], y_comp[a][0])  
     circs.append(curr_circle)
 
@@ -91,15 +98,14 @@ def init():
     return circs
 
 def animate(i):
-	print(i)
-	for a in range(num_circs):
-		print(a)
-		x = x_comp[a][i]
-		y = y_comp[a][i]
-		circs[a].center = (x, y)
-		if i > min_length*0:
-			circs[a].set_facecolor(colors[a])
-	return circs
+    for a in range(num_circs):
+        if i > len(x_comp[a])-1:
+            circs[a].set_facecolor(colors[a])
+        else:
+            x = x_comp[a][i]
+            y = y_comp[a][i]
+            circs[a].center = (x, y) 
+    return circs
 
 anim = animation.FuncAnimation(fig, animate, 
                                init_func=init, 
