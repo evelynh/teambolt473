@@ -138,7 +138,7 @@ def generate_path(start, tot_dist, x_max, y_max):
                 r_angle = (r_angle + angle1) % 360
             else:
                 r_angle = (r_angle + angle2) % 360
-      	r_dist = 30
+      	r_dist = 20
       	gen_point = generate_point(curr_point, r_angle, r_dist, x_max, y_max)
       	dist = calc_dist(curr_point, gen_point)
       	dist_remain = dist_remain - dist
@@ -174,4 +174,4 @@ def generate_set(start, tot_dist, x_max, y_max, n):
         	print("REJECTED")
     return toReturn
 
-#print(generate_set([0,0], 750, 60, 60, 1))
+print(generate_set([0,0], 750, 60, 60, 1))

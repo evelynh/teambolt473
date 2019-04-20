@@ -1,6 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from matplotlib import animation
+# from matplotlib import animation
+import matplotlib.animation as animation
 
 import paths
 
@@ -63,6 +64,10 @@ for i in range(0, num_circs):
     x_comp.append(x_data)
     y_comp.append(y_data)
 
+# Set up formatting for the movie files
+Writer = animation.writers['ffmpeg']
+writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
+
 # code to animate
 fig = plt.figure()
 ax = fig.add_subplot(111)
@@ -86,17 +91,28 @@ def init():
     return circs
 
 def animate(i):
-    for a in range(num_circs):
-        x = x_comp[a][i]
-        y = y_comp[a][i]
-        circs[a].center = (x, y) 
-        # if i > min_length*0:
-        #     circs[a].set_facecolor(colors[a])
-    return circs
+	print(i)
+	for a in range(num_circs):
+		print(a)
+		x = x_comp[a][i]
+		y = y_comp[a][i]
+		circs[a].center = (x, y)
+		if i > min_length*0:
+			circs[a].set_facecolor(colors[a])
+	return circs
 
 anim = animation.FuncAnimation(fig, animate, 
                                init_func=init, 
-                               frames=min_length*100, 
+                               frames=1000, 
                                interval=30,
                                blit=True)
+# line_ani = animation.FuncAnimation(fig, animate, 
+#                                init_func=init, 
+#                                frames=100, 
+#                                interval=30,
+#                                blit=True)
+# line_ani.save('lines.mp4', writer=writer)
+
+
+
 plt.show()
