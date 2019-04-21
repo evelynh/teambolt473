@@ -62,13 +62,12 @@ num_circs = 5
 #     orig_gen_paths.append(paths.generate_set(origins[i], 675, 80, 80, num_circs)[0])
 
 reset_origins = [[15.24, -15.24], [15.24, 15.24], [0, 0], [-15.24, -15.24], [-15.24, 15.24]]
-    
-orig_x_comp = []
-orig_y_comp = []
 
 orig_gen_paths = generate_trials.generate_trials()
 
 for j in range(0, len(orig_gen_paths[0])):
+	orig_x_comp = []
+	orig_y_comp = []
 	for i in range(0, num_circs):
 		cur_path = [[0, 0]]
 		cur_path.extend(orig_gen_paths[i][j])
@@ -103,7 +102,7 @@ for j in range(0, len(orig_gen_paths[0])):
 
 	# code to animate
 	fig = plt.figure()
-	fig.set_size_inches(5, 5)
+	fig.set_size_inches(6, 6)
 	ax = fig.add_subplot(111)
 
 	plt.xlim(-100, 100)
@@ -131,3 +130,4 @@ for j in range(0, len(orig_gen_paths[0])):
 	ani.save('trials/trial' + str(j) + '.mp4', writer=writer, savefig_kwargs={'facecolor':'black'})
 
 	# plt.show()
+	plt.close()
