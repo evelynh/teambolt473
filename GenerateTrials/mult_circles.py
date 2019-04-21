@@ -69,23 +69,25 @@ orig_y_comp = []
 orig_gen_paths = generate_trials.generate_trials()
 
 for j in range(0, len(orig_gen_paths[0])):
-
 	for i in range(0, num_circs):
-	    x_data, y_data = reformat(orig_gen_paths[i][j], reset_origins[i])
-	    orig_x_comp.append(x_data)
-	    orig_y_comp.append(y_data)
-
+		cur_path = [[0, 0]]
+		cur_path.extend(orig_gen_paths[i][j])
+		x_data, y_data = reformat(cur_path, reset_origins[i])
+		orig_x_comp.append(x_data)
+		orig_y_comp.append(y_data)
+	# print(orig_x_comp)
+	# print(orig_y_comp)
 	x_comp = []
 	y_comp = []
 
 	min_x_length = float("inf")
 	for i in range(0, num_circs):
-	    curr_x_length = len(orig_x_comp[i])
+	    curr_x_length = len(orig_x_comp[i]) + 1
 	    if curr_x_length < min_x_length:
 	        min_x_length = curr_x_length
 	min_y_length = float("inf")
 	for i in range(0, num_circs):
-	    curr_y_length = len(orig_y_comp[i])
+	    curr_y_length = len(orig_y_comp[i]) + 1
 	    if curr_y_length < min_y_length:
 	        min_y_length = curr_y_length
 

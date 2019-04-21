@@ -9,7 +9,7 @@ import random
 import csv
 
 # Generate paths for each sphero
-total_trials = 60
+total_trials = 30
 
 # special contains all trials that have chasing
 # We used an online random generate to decide which trials those would be 
@@ -136,8 +136,8 @@ def replace_chase_trials(compiled_paths, special):
 #Print out paths
 def generate_trials():
     initial_paths = generate_paths(total_trials)
-    unique = 20
-    repeats = total_trials//unique
+    repeats = 3
+    unique = total_trials//repeats
     wolf_sheep_data = chase_trials(unique, repeats)
     final_paths = replace_chase_trials(initial_paths, wolf_sheep_data)
     print("------------------------------------------------------------------------")          
