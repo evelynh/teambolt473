@@ -5,6 +5,9 @@ import matplotlib.animation as animation
 import paths
 import generate_trials
 
+x_comp = []
+y_comp = []
+
 def intermediates(p1, p2):
     """"Return a list of nb_points equally spaced points
     between p1 and p2"""
@@ -23,6 +26,7 @@ def reformat(points, origin):
 	""""Takes x, y pairs and makes it into an array of x's and y's
 	Also fixes relative to origin"""
 	f_points = []
+	# print(points)
 	for i in range(0, len(points)-1):
 		p_1 = points[i]
 		p_2 = points[i+1]
@@ -33,7 +37,6 @@ def reformat(points, origin):
 	y_data = []
 	# fixes origins
 	for point in f_points:
-		# print(point)	
 		x_data.append(point[0] + origin[0])
 		y_data.append(point[1] + origin[1]) 
 	return x_data, y_data
@@ -71,11 +74,12 @@ for j in range(0, len(orig_gen_paths[0])):
 	for i in range(0, num_circs):
 		cur_path = [[0, 0]]
 		cur_path.extend(orig_gen_paths[i][j])
+		# print(i)
+		# print(cur_path)
 		x_data, y_data = reformat(cur_path, reset_origins[i])
 		orig_x_comp.append(x_data)
 		orig_y_comp.append(y_data)
-	# print(orig_x_comp)
-	# print(orig_y_comp)
+
 	x_comp = []
 	y_comp = []
 
@@ -102,11 +106,11 @@ for j in range(0, len(orig_gen_paths[0])):
 
 	# code to animate
 	fig = plt.figure()
-	fig.set_size_inches(6, 6)
+	fig.set_size_inches(5, 5)
 	ax = fig.add_subplot(111)
 
-	plt.xlim(-100, 100)
-	plt.ylim(-100, 100)
+	plt.xlim(-120, 120)
+	plt.ylim(-120, 120)
 	plt.axis('off')
 	fig.patch.set_facecolor((0, 0, 0))
 
