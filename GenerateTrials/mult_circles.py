@@ -31,6 +31,7 @@ def reformat(points, origin):
 		p_1 = points[i]
 		p_2 = points[i+1]
 		btwn = intermediates(p_1, p_2)
+		# print(points[i][0] + origin[0], points[i][1] + origin[1])
 		for p in btwn:
 			f_points.append(p)
 	x_data = []
@@ -64,7 +65,7 @@ num_circs = 5
 # for i in range(num_circs):
 #     orig_gen_paths.append(paths.generate_set(origins[i], 675, 80, 80, num_circs)[0])
 
-reset_origins = [[15.24, -15.24], [15.24, 15.24], [0, 0], [-15.24, -15.24], [-15.24, 15.24]]
+reset_origins = [[-15.24, 15.24], [15.24, 15.24], [0, 0], [-15.24, -15.24], [15.24, -15.24]]
 
 orig_gen_paths = generate_trials.generate_trials()
 
@@ -77,8 +78,12 @@ for j in range(0, len(orig_gen_paths[0])):
 		# print(i)
 		# print(cur_path)
 		x_data, y_data = reformat(cur_path, reset_origins[i])
+		# print(x_data)
+		# print(y_data)
 		orig_x_comp.append(x_data)
 		orig_y_comp.append(y_data)
+	# print(orig_x_comp)
+	# print(orig_y_comp)
 
 	x_comp = []
 	y_comp = []
