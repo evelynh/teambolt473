@@ -113,6 +113,11 @@ for j in range(0, len(orig_gen_paths[0])):
 	fig = plt.figure()
 	fig.set_size_inches(5, 5)
 	ax = fig.add_subplot(111)
+	ax.hlines(y=80, xmin=-80, xmax=80, linewidth=2, color='w')
+	ax.hlines(y=-80, xmin=-80, xmax=80, linewidth=2, color='w')
+	ax.vlines(x=80, ymin=-80, ymax=80,  linewidth=2, color='w')
+	ax.vlines(x=-80, ymin=-80, ymax=80,  linewidth=2, color='w')
+
 
 	plt.xlim(-120, 120)
 	plt.ylim(-120, 120)
